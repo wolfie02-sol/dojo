@@ -10,6 +10,8 @@
  * (Free tool: https://squoosh.app — resize, then export as JPG and WebP.)
  */
 
+import type { SectionId } from './site'
+
 export interface ResponsiveImage {
   /** Path without size/extension, e.g. '/images/dojo/hall' → hall-1280.webp, hall-1920.jpg … */
   base: string
@@ -47,10 +49,10 @@ export const hero = {
     duration: 14,
     /** Point the camera moves towards (CSS transform-origin) */
     origin: '40% 52%',
-    /** Extra zoom applied while scrolling past the hero (0 = off) */
-    scrollScale: 0.08,
   },
 }
+
+const hall = (focus: string): ResponsiveImage => ({ ...hero.image, focus })
 
 export const sectionImages = {
   about: {
@@ -64,4 +66,18 @@ export const sectionImages = {
     alt: { fr: 'Élèves en karategi assis devant leur sensei', en: 'Students in karate gi seated in front of their sensei' },
     focus: '50% 18%',
   } as ResponsiveImage,
+}
+
+/**
+ * Banner photo at the top of each section page (replace with real dojo photos later).
+ * `focus` picks which part of the photo stays visible in the wide, short banner.
+ */
+export const pageBanners: Record<SectionId, ResponsiveImage> = {
+  about: { ...sectionImages.about, focus: '50% 60%' },
+  sensei: hall('8% 40%'),
+  schedule: sectionImages.classes,
+  calendar: hall('80% 55%'),
+  blackBelts: { ...sectionImages.classes, focus: '55% 35%' },
+  links: { ...sectionImages.about, focus: '70% 50%' },
+  contact: hall('62% 62%'),
 }

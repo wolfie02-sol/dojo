@@ -1,8 +1,9 @@
 # Dojo website — JKA Shotokan karate (simple version)
 
-A calm, realistic one-page website in French and English. It opens on a full-screen photograph of a
-traditional Japanese hall with a slow "walking in" zoom (or a video, if you add one), then scrolls through
-the sections: About, Sensei, Schedule, Calendar, Black belts, Links and Contact.
+A calm, realistic website in French and English. The home page is a full-screen photograph of a
+traditional Japanese hall with a slow "walking in" zoom (or a video, if you add one) and the menu laid over
+it. Each section is its own page: About, Sensei, Schedule, Calendar, Black belts, Links and Contact.
+Every section page has a photo banner, the content, and links to the previous and next sections.
 
 All business content is **placeholder** for now: see [Editing the content](#editing-the-content).
 
@@ -53,9 +54,8 @@ npm run preview
 | Contact | `/fr/contact` | `/en/contact` |
 
 - `/` always opens the French site.
-- A section address opens the page scrolled to that section, so you can share it.
-- Menu links scroll smoothly and work with Back / Forward.
-- Scrolling by hand updates the address without filling the browser history.
+- Every page has its own address, so you can share it or reload it.
+- The browser's Back / Forward buttons move between pages.
 
 ---
 
@@ -92,7 +92,7 @@ Interface wording is in [`src/i18n/ui.ts`](src/i18n/ui.ts).
   `public/images/dojo/`. For example: `hall-1280.jpg`, `hall-1280.webp`, `hall-1920.jpg`, `hall-1920.webp`,
   `hall-2560.jpg`, `hall-2560.webp`. [Squoosh](https://squoosh.app) can resize and export them.
 - **Opening zoom:** `hero.zoom`. `scale` sets how far the camera moves, `duration` sets how long it takes,
-  `origin` sets the point it moves towards, and `scrollScale` sets the extra zoom while scrolling.
+  and `origin` sets the point it moves towards.
 - **Video instead of a photo:** film a slow walk through the dojo's doors on a phone (ideally on a gimbal,
   10–20 s, landscape), put it in `public/video/`, then set `hero.video = { mp4: '/video/entrance.mp4' }`.
   To make the file web-friendly, with no sound and about 5 MB:
@@ -103,8 +103,8 @@ Interface wording is in [`src/i18n/ui.ts`](src/i18n/ui.ts).
 
   The video plays muted and on a loop, with a pause button. The photo is used as its poster image and for
   visitors who prefer reduced motion.
-- **Section photos:** `sectionImages`. `about` is the room beside the About text, and `classes` is the band
-  above the schedule.
+- **Section photos:** `pageBanners` chooses the banner photo at the top of each section page (and which part
+  of it stays in view). `sectionImages.about` is the photo beside the About text.
 - **Instructor and black-belt photos:** the `photo` fields in `content.ts`, for example
   `'/images/black-belts/jane.jpg'` (portrait 4:5, about 600×750 px).
 
@@ -138,13 +138,13 @@ Each event's type (grading, tournament, seminar, closure) is detected from words
 ## Look and feel
 
 - **Colours, fonts, spacing:** the CSS variables at the top of [`src/styles/global.css`](src/styles/global.css).
-- **Opening animation:** `hero.zoom` in `media.ts`. The fade-in of the title is the `.hero__content` rules
-  in the CSS.
+- **Opening animation:** `hero.zoom` in `media.ts`. The fade-in of the title and menu is the `.home__intro`
+  and `.home__menu` rules in the CSS.
 
 ## Accessibility and reliability
 
 - Real HTML throughout.
-- Keyboard: skip link, visible focus, and focus moves to a section's heading after a menu jump.
+- Keyboard: skip link, visible focus, and focus moves to the new page's heading after each page change.
 - Menu: a native dialog with Escape and a focus trap.
 - Touch targets are at least 44 px.
 - Visitors who turn on "reduce motion" in their system settings get no zoom, no fades and no autoplaying video.

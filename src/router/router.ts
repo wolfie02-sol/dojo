@@ -1,10 +1,8 @@
 /**
- * Tiny router for a one-page site: /fr/, /fr/horaire, /en/schedule …
- *
- * - Clicking a menu link calls `navigate()`: the address changes (shareable, Back works)
- *   and the page scrolls to that section.
- * - Scrolling by hand calls `syncRoute()`: the address follows the section in view
- *   without adding history entries and without scrolling.
+ * Tiny router: each section is its own page.
+ *   /fr/            home (photo + menu)
+ *   /fr/horaire     Schedule page, /en/schedule in English …
+ * Links are shareable, reload works, and Back / Forward move between pages.
  */
 import { useSyncExternalStore } from 'react'
 import { DEFAULT_LANG, LANGS, SECTIONS, SECTION_IDS, type Lang, type SectionId } from '../config/site'
@@ -34,8 +32,7 @@ export function parsePath(pathname: string): Route | null {
   return section ? { lang, section } : null
 }
 
-const routeListeners = new Set<() => void>()
-const scrollListeners = new Set<(route: Route, smooth: boolean) => void>()
+const listeners = new Set<() => void>()
 let current: Route = readLocation()
 
 function readLocation(): Route {
@@ -44,48 +41,38 @@ function readLocation(): Route {
 function setCurrent(next: Route) {
   if (next.lang === current.lang && next.section === current.section) return
   current = next
-  routeListeners.forEach((l) => l())
+  listeners.forEach((l) => l())
 }
 
-window.addEventListener('popstate', () => {
-  setCurrent(readLocation())
-  scrollListeners.forEach((l) => l(current, true))
-})
+window.addEventListener('popstate', () => setCurrent(readLocation()))
 
 /** Normalise the address once at start-up ("/" → "/fr/", unknown → "/fr/"). */
 export function normaliseInitialUrl() {
   const canonical = routeToPath(readLocation())
-  if (window.location.pathname !== canonical) window.history.replaceState(null, '', canonical + window.location.search + window.location.hash)
+  if (window.location.pathname !== canonical) window.history.replaceState(null, '', canonical + window.location.search)
   current = readLocation()
 }
 
-/** Go to a section (or the top with section: null) — updates the address and scrolls. */
-export function navigate(route: Route, opts: { smooth?: boolean } = {}) {
+/** Open a page (section: null = home). */
+export function navigate(route: Route) {
   const path = routeToPath(route)
   if (path !== window.location.pathname) window.history.pushState(null, '', path + window.location.search)
   setCurrent(route)
-  scrollListeners.forEach((l) => l(route, opts.smooth ?? true))
 }
 
-/** Keep the address in step with the section in view (no history entry, no scrolling). */
-export function syncRoute(route: Route) {
-  const path = routeToPath(route)
-  if (path !== window.location.pathname) window.history.replaceState(null, '', path + window.location.search)
-  setCurrent(route)
-}
-
-export function onScrollRequest(cb: (route: Route, smooth: boolean) => void) {
-  scrollListeners.add(cb)
-  return () => {
-    scrollListeners.delete(cb)
-  }
+/** For links: keep real hrefs (new tab / copy link) but navigate in-page on a normal click. */
+export function linkClick(e: React.MouseEvent<HTMLAnchorElement>, route: Route, after?: () => void) {
+  if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return
+  e.preventDefault()
+  after?.()
+  navigate(route)
 }
 
 export function useRoute(): Route {
   return useSyncExternalStore(
     (l) => {
-      routeListeners.add(l)
-      return () => routeListeners.delete(l)
+      listeners.add(l)
+      return () => listeners.delete(l)
     },
     () => current,
   )

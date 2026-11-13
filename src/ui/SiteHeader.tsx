@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { dojo } from '../config/content'
 import { LANGS, SECTIONS, SECTION_IDS, type Lang, type SectionId } from '../config/site'
 import { UI } from '../i18n/ui'
-import { navigate, routeToPath, useRoute } from '../router/router'
+import { linkClick, routeToPath, useRoute } from '../router/router'
 import { IconClose, IconMenu } from './Icons'
 
 const other = (lang: Lang): Lang => LANGS.find((l) => l !== lang) ?? lang
@@ -11,7 +11,7 @@ const other = (lang: Lang): Lang => LANGS.find((l) => l !== lang) ?? lang
 function useScrolled() {
   const [scrolled, setScrolled] = useState(false)
   useEffect(() => {
-    const on = () => setScrolled(window.scrollY > window.innerHeight * 0.6)
+    const on = () => setScrolled(window.scrollY > 24)
     on()
     window.addEventListener('scroll', on, { passive: true })
     return () => window.removeEventListener('scroll', on)
@@ -33,17 +33,13 @@ export function SiteHeader() {
     if (!open && d.open) d.close()
   }, [open])
 
-  const go = (e: React.MouseEvent<HTMLAnchorElement>, section: SectionId | null, lang: Lang = route.lang) => {
-    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return
-    e.preventDefault()
-    setOpen(false)
-    navigate({ lang, section })
-  }
+  const go = (e: React.MouseEvent<HTMLAnchorElement>, section: SectionId | null, lang: Lang = route.lang) =>
+    linkClick(e, { lang, section }, () => setOpen(false))
 
   const links = (inDrawer: boolean) =>
     SECTION_IDS.map((id) => (
       <li key={id}>
-        <a href={routeToPath({ lang: route.lang, section: id })} aria-current={route.section === id ? 'true' : undefined} onClick={(e) => go(e, id)}>
+        <a href={routeToPath({ lang: route.lang, section: id })} aria-current={route.section === id ? 'page' : undefined} onClick={(e) => go(e, id)}>
           {inDrawer && (
             <span className="drawer__kanji" lang="ja" aria-hidden="true">
               {SECTIONS[id].kanji}
