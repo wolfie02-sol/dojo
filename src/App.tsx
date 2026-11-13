@@ -23,7 +23,7 @@ const CONTENT: Record<SectionId, ComponentType<{ lang: Lang }>> = {
 const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches
 
 /** Scroll to a section (or the top) and move keyboard focus to its heading. */
-function scrollToSection(section: SectionId | null, smooth: boolean) {
+function scrollToSection(section: SectionId | null, smooth: boolean, moveFocus = true) {
   const behavior: ScrollBehavior = smooth && !reducedMotion() ? 'smooth' : 'auto'
   if (!section) {
     window.scrollTo({ top: 0, behavior })
@@ -32,7 +32,7 @@ function scrollToSection(section: SectionId | null, smooth: boolean) {
   const el = document.getElementById(section)
   if (!el) return
   el.scrollIntoView({ behavior, block: 'start' })
-  el.querySelector<HTMLElement>('h2')?.focus({ preventScroll: true })
+  if (moveFocus) el.querySelector<HTMLElement>('h2')?.focus({ preventScroll: true })
 }
 
 export function App() {
@@ -68,7 +68,7 @@ export function App() {
     const align = () => {
       if (userMoved || getRoute().section !== r.section) return
       spyPausedUntil.current = performance.now() + 600
-      scrollToSection(r.section, false)
+      scrollToSection(r.section, false, false)
     }
     requestAnimationFrame(align)
     document.fonts?.ready.then(align)
