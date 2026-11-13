@@ -1,0 +1,5 @@
+# Apache (e.g. Hostinger): send every unknown path to index.html so /fr/horaire etc. work on reload.
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.html [L]

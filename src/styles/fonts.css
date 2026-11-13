@@ -1,0 +1,7 @@
+/* Japanese accents, reduced to the characters the site uses (scripts/subset-fonts.mjs). */
+@font-face {
+  font-family: 'Shippori Mincho';
+  src: url('/fonts/shippori-mincho-subset.woff2') format('woff2');
+  font-weight: 400 600;
+  font-display: swap;
+}
