@@ -17,6 +17,32 @@ Notes:
   people shown.
 - The files were resized and re-encoded (JPG + WebP) for the web.
 
+## Home page collage (`public/images/collage/`)
+
+All from Unsplash under the [Unsplash License](https://unsplash.com/license) (free for commercial use, no attribution required). Cropped to 720×480 and re-encoded (WebP + JPG).
+
+| File | Photo | Photographer | Source |
+|---|---|---|---|
+| `fuji-sunset` | Mount Fuji at sunset | Aditya Anjagi | https://unsplash.com/photos/mount-fuji-in-fujinomiya-japan-KZSDCocsOEE |
+| `fuji-chureito-pagoda` | Chureito pagoda and Mount Fuji | David Edelstein | https://unsplash.com/photos/mount-fuji-japan-N4DbvTUDikw |
+| `fuji-cherry-blossoms` | Mount Fuji framed by cherry blossoms | Kim Cuong Nguyen | https://unsplash.com/photos/snow-capped-mount-fuji-framed-by-cherry-blossoms-and-a-lake-OekNHdeWjOg |
+| `cherry-reflection` | Cherry trees reflected in water | Redd Francisco | https://unsplash.com/photos/cherry-blossom-trees-near-river-Lm5rkxzgiFQ |
+| `meguro-canal-night` | Cherry blossoms over a Tokyo canal at night | Crystal Kay | https://unsplash.com/photos/cherry-blossoms-over-canal-in-tokyo-7viWpO0fNss |
+| `pagoda-blossoms` | Pagoda and cherry blossoms | ERIC MIYAGI | https://unsplash.com/photos/orange-pagoda-surrounded-by-blooming-cherry-blossoms-RqEHRPk8P3s |
+| `kinkakuji` | Golden Pavilion (Kinkaku-ji), Kyoto | Jean Vella | https://unsplash.com/photos/a-pagoda-in-the-middle-of-a-lake-surrounded-by-trees-985DmR-rX4A |
+| `kiyomizu-sunset` | Temple with cherry blossoms at sunset | Nathalie Lays | https://unsplash.com/photos/traditional-japanese-temple-with-cherry-blossoms-at-sunset-4Q-Rbu8Ipcg |
+| `yasaka-pagoda` | Yasaka pagoda, Kyoto | Roméo A. | https://unsplash.com/photos/pagoda-on-narrow-street-in-kyoto-SlIl9eZjWUc |
+| `fushimi-inari` | Fushimi Inari torii gates | David Emrich | https://unsplash.com/photos/torii-gates-in-kyoto-EJvGBYjrwEA |
+| `mtl-skyline-mount-royal` | Downtown Montreal from Mount Royal | Hamed Naji | https://unsplash.com/photos/montreal-cityscape-at-dusk-with-trees-in-foreground-P3iv41XjlW8 |
+| `mtl-bonsecours` | Bonsecours Market dome | Shijin Bensinger | https://unsplash.com/photos/bonsecours-market-dome-in-montreal-srj8-Mw3Alk |
+| `mtl-old-montreal-street` | Cobblestone street, Old Montreal | Dmitri M | https://unsplash.com/photos/a-cobblestone-street-lined-with-tall-buildings-7SvhuD1wsts |
+| `mtl-old-port` | Old Port and Jacques-Cartier Bridge | Walid Amghar | https://unsplash.com/photos/boat-docked-far-away-from-suspension-bridge-WP1ORoT7KGA |
+| `mtl-biosphere` | Montreal Biosphere | Phil Desforges | https://unsplash.com/photos/a-large-geodesic-dome-building-by-a-river-at-sunset-npaOGlIMqQw |
+| `mtl-skyline-night` | Montreal skyline at night | Marc-Olivier Jodoin | https://unsplash.com/photos/landscape-photography-of-skyscrapers-BG9oZ15a4Xk |
+| `mtl-grande-roue` | Grande Roue and Old Port at dusk | Michael Beener | https://unsplash.com/photos/aerial-photo-of-cityscape-during-daytime-DYwx0KV9D80 |
+
+Before launch, open each source link once to confirm the photo is still offered under the free Unsplash License (not Unsplash+).
+
 ## Other files
 
 | Asset | Source | Licence |

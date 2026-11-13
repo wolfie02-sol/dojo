@@ -1,17 +1,17 @@
 /**
- * Home page: full-screen photo (or video) of the dojo with a slow "walking in" zoom,
- * the dojo's name, and the menu of sections laid over the image.
- * Reduced motion: no zoom, video not autoplayed.
+ * Home page: a slowly drifting photo collage (Japan + Montreal), the dojo's name,
+ * and the menu of sections on top.
+ * Rows scroll in alternating directions. A pause button stops the movement, and
+ * visitors who prefer reduced motion get a still collage.
  */
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { dojo } from '../config/content'
-import { hero } from '../config/media'
+import { collage, type CollagePhoto } from '../config/media'
 import { SECTIONS, SECTION_IDS, type Lang } from '../config/site'
 import { UI } from '../i18n/ui'
 import { linkClick, routeToPath } from '../router/router'
-import { Picture } from './Picture'
 
-const asset = (p: string) => (p.startsWith('/') ? `${import.meta.env.BASE_URL}${p.slice(1)}` : p)
+const asset = (p: string) => `${import.meta.env.BASE_URL}${p.replace(/^\//, '')}`
 
 export function useReducedMotion() {
   const [reduced, setReduced] = useState(() => matchMedia('(prefers-reduced-motion: reduce)').matches)
@@ -24,39 +24,62 @@ export function useReducedMotion() {
   return reduced
 }
 
+/** Each row shows 8 photos taken from the list at a different starting point. */
+function rowPhotos(row: number): CollagePhoto[] {
+  const list = collage.photos
+  const perRow = Math.min(8, list.length)
+  const start = (row * 5) % list.length
+  return Array.from({ length: perRow }, (_, i) => list[(start + i) % list.length])
+}
+
+function Tile({ photo, eager }: { photo: CollagePhoto; eager: boolean }) {
+  const [failed, setFailed] = useState(false)
+  if (failed) return <span className="collage__tile collage__tile--missing" />
+  return (
+    <picture className="collage__tile">
+      <source type="image/webp" srcSet={asset(`/images/collage/${photo.file}.webp`)} />
+      <img src={asset(`/images/collage/${photo.file}.jpg`)} alt="" width={720} height={480} loading={eager ? 'eager' : 'lazy'} decoding="async" onError={() => setFailed(true)} />
+    </picture>
+  )
+}
+
+function Collage({ lang, moving }: { lang: Lang; moving: boolean }) {
+  const rows = Array.from({ length: collage.rows }, (_, r) => r)
+  return (
+    <div className={`collage${moving ? ' is-moving' : ''}`} role="img" aria-label={UI[lang].collageLabel} style={{ '--rows': collage.rows } as React.CSSProperties}>
+      <div className="collage__wall">
+        {rows.map((r) => {
+          const photos = rowPhotos(r)
+          return (
+            <div
+              key={r}
+              className={`collage__row${r % 2 ? ' collage__row--reverse' : ''}`}
+              style={{ '--duration': `${collage.secondsPerLoop * (1 + (r % 3) * 0.14)}s` } as React.CSSProperties}
+            >
+              {/* the set is drawn twice so the loop is seamless */}
+              <div className="collage__track">
+                {[...photos, ...photos].map((p, i) => (
+                  <Tile key={i} photo={p} eager={r < 3 && i < 6} />
+                ))}
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 export function Home({ lang }: { lang: Lang }) {
   const ui = UI[lang]
   const reduced = useReducedMotion()
-  const video = useRef<HTMLVideoElement>(null)
-  const [playing, setPlaying] = useState(!reduced)
-
-  useEffect(() => {
-    const v = video.current
-    if (!v) return
-    if (playing) v.play().catch(() => setPlaying(false))
-    else v.pause()
-  }, [playing])
-
-  const zoomStyle = {
-    '--zoom-scale': hero.zoom.scale,
-    '--zoom-duration': `${hero.zoom.duration}s`,
-    transformOrigin: hero.zoom.origin,
-  } as React.CSSProperties
-  const poster = asset(`${hero.image.base}-${hero.image.widths[hero.image.widths.length - 1]}.jpg`)
+  const [paused, setPaused] = useState(false)
+  const moving = !reduced && !paused
 
   return (
     <div className="home">
-      <div className="home__media" aria-hidden={hero.video ? true : undefined}>
-        <div className={`home__zoom${reduced ? '' : ' is-moving'}`} style={zoomStyle}>
-          {hero.video && !reduced ? (
-            <video ref={video} className="home__img" autoPlay muted loop playsInline preload="auto" poster={poster}>
-              {hero.video.mp4Mobile && <source src={asset(hero.video.mp4Mobile)} type="video/mp4" media="(max-width: 800px)" />}
-              <source src={asset(hero.video.mp4)} type="video/mp4" />
-            </video>
-          ) : (
-            <Picture image={hero.image} lang={lang} sizes="100vw" className="home__img" eager />
-          )}
-        </div>
+      <div className="home__media">
+        <Collage lang={lang} moving={moving} />
         <div className="home__shade" />
       </div>
 
@@ -65,14 +88,16 @@ export function Home({ lang }: { lang: Lang }) {
           <p className="home__kanji" lang="ja" aria-hidden="true">
             {dojo.calligraphy}
           </p>
-          <h1 className="home__title" tabIndex={-1}>{dojo.name[lang]}</h1>
+          <h1 className="home__title" tabIndex={-1}>
+            {dojo.name[lang]}
+          </h1>
           <p className="home__tagline">{dojo.tagline[lang]}</p>
         </div>
 
         <nav className="home__menu" aria-label={ui.sections}>
           <ul>
             {SECTION_IDS.map((id, i) => (
-              <li key={id} style={{ animationDelay: `${1.9 + i * 0.08}s` }}>
+              <li key={id} style={{ animationDelay: `${0.5 + i * 0.07}s` }}>
                 <a href={routeToPath({ lang, section: id })} onClick={(e) => linkClick(e, { lang, section: id })}>
                   <span className="home__menu-kanji" lang="ja" aria-hidden="true">
                     {SECTIONS[id].kanji}
@@ -86,16 +111,16 @@ export function Home({ lang }: { lang: Lang }) {
         </nav>
       </div>
 
-      {hero.video && !reduced && (
-        <button type="button" className="home__pause" onClick={() => setPlaying((p) => !p)} aria-label={playing ? ui.pauseVideo : ui.playVideo}>
-          {playing ? (
+      {!reduced && (
+        <button type="button" className="home__pause" onClick={() => setPaused((p) => !p)} aria-pressed={paused} aria-label={paused ? ui.playAnimation : ui.pauseAnimation}>
+          {paused ? (
             <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
-              <rect x="3" y="2" width="3.5" height="12" rx="1" fill="currentColor" />
-              <rect x="9.5" y="2" width="3.5" height="12" rx="1" fill="currentColor" />
+              <path d="M4 2.5v11l9-5.5z" fill="currentColor" />
             </svg>
           ) : (
             <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
-              <path d="M4 2.5v11l9-5.5z" fill="currentColor" />
+              <rect x="3" y="2" width="3.5" height="12" rx="1" fill="currentColor" />
+              <rect x="9.5" y="2" width="3.5" height="12" rx="1" fill="currentColor" />
             </svg>
           )}
         </button>

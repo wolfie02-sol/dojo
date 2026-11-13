@@ -1,8 +1,7 @@
 # Dojo website — JKA Shotokan karate (simple version)
 
-A calm, realistic website in French and English. The home page is a full-screen photograph of a
-traditional Japanese hall with a slow "walking in" zoom (or a video, if you add one) and the menu laid over
-it. Each section is its own page: About, Sensei, Schedule, Calendar, Black belts, Links and Contact.
+A calm, realistic website in French and English. The home page is a slowly drifting collage of photos of
+Japan (Mount Fuji, cherry blossoms, temples) and Montreal, with the dojo's name and the menu laid over it. Each section is its own page: About, Sensei, Schedule, Calendar, Black belts, Links and Contact.
 Every section page has a photo banner, the content, and links to the previous and next sections.
 
 All business content is **placeholder** for now: see [Editing the content](#editing-the-content).
@@ -88,21 +87,10 @@ Interface wording is in [`src/i18n/ui.ts`](src/i18n/ui.ts).
 
 [`src/config/media.ts`](src/config/media.ts) controls the opening image or video, the zoom, and the section photos.
 
-- **Opening image:** `hero.image`. Each image needs one file per width, in JPG and WebP, in
-  `public/images/dojo/`. For example: `hall-1280.jpg`, `hall-1280.webp`, `hall-1920.jpg`, `hall-1920.webp`,
-  `hall-2560.jpg`, `hall-2560.webp`. [Squoosh](https://squoosh.app) can resize and export them.
-- **Opening zoom:** `hero.zoom`. `scale` sets how far the camera moves, `duration` sets how long it takes,
-  and `origin` sets the point it moves towards.
-- **Video instead of a photo:** film a slow walk through the dojo's doors on a phone (ideally on a gimbal,
-  10–20 s, landscape), put it in `public/video/`, then set `hero.video = { mp4: '/video/entrance.mp4' }`.
-  To make the file web-friendly, with no sound and about 5 MB:
-
-  ```bash
-  ffmpeg -i input.mov -an -vf scale=1920:-2 -c:v libx264 -crf 26 -preset slow -movflags +faststart public/video/entrance.mp4
-  ```
-
-  The video plays muted and on a loop, with a pause button. The photo is used as its poster image and for
-  visitors who prefer reduced motion.
+- **Home page collage:** `collage` in `media.ts` lists the photos (files in `public/images/collage/`, each as
+  `.webp` + `.jpg`, about 720×480), the number of rows and the speed (`secondsPerLoop`, higher is slower).
+  Add, remove or reorder photos freely. A pause button stops the movement, and visitors who prefer reduced
+  motion see a still collage.
 - **Section photos:** `pageBanners` chooses the banner photo at the top of each section page (and which part
   of it stays in view). `sectionImages.about` is the photo beside the About text.
 - **Instructor and black-belt photos:** the `photo` fields in `content.ts`, for example
@@ -138,8 +126,8 @@ Each event's type (grading, tournament, seminar, closure) is detected from words
 ## Look and feel
 
 - **Colours, fonts, spacing:** the CSS variables at the top of [`src/styles/global.css`](src/styles/global.css).
-- **Opening animation:** `hero.zoom` in `media.ts`. The fade-in of the title and menu is the `.home__intro`
-  and `.home__menu` rules in the CSS.
+- **Collage look:** the `.collage` rules in the CSS (tilt angle, gap, rounded corners); the darkening over it is
+  `.home__shade`.
 
 ## Accessibility and reliability
 
@@ -147,7 +135,7 @@ Each event's type (grading, tournament, seminar, closure) is detected from words
 - Keyboard: skip link, visible focus, and focus moves to the new page's heading after each page change.
 - Menu: a native dialog with Escape and a focus trap.
 - Touch targets are at least 44 px.
-- Visitors who turn on "reduce motion" in their system settings get no zoom, no fades and no autoplaying video.
+- Visitors who turn on "reduce motion" in their system settings get a still collage and no fades; everyone else gets a pause button.
 - A missing photo is replaced by a neutral block, and a missing instructor photo by a silhouette.
 - No audio, no tracking, no external requests apart from Google Calendar once you configure it.
 
