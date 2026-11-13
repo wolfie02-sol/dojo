@@ -6,10 +6,18 @@
  * gable roof whose triangular end faces the garden. Pillars every 3 m.
  */
 import * as THREE from 'three'
-import { useMemo, type ReactNode } from 'react'
+import { useEffect, useMemo, type ReactNode } from 'react'
 import type { ThreeElements } from '@react-three/fiber'
 import { FLOOR_Y } from '../config/experience'
 import { useMaterials } from './materials'
+import { worldBox } from './realAssets'
+
+/** worldBox geometry that is disposed with its component */
+export function useWorldBox(w: number, h: number, d: number) {
+  const g = useMemo(() => worldBox(w, h, d), [w, h, d])
+  useEffect(() => () => g.dispose(), [g])
+  return g
+}
 
 export const HALF_W = 5
 export const DEPTH = 15
@@ -27,11 +35,8 @@ type MeshProps = ThreeElements['mesh']
 
 /** Box with given size and centre */
 export function Box({ size, at, material, shadow = true, ...rest }: { size: [number, number, number]; at: [number, number, number]; material: THREE.Material | THREE.Material[]; shadow?: boolean } & Omit<MeshProps, 'position'>) {
-  return (
-    <mesh position={at} material={material} castShadow={shadow} receiveShadow {...rest}>
-      <boxGeometry args={size} />
-    </mesh>
-  )
+  const geo = useWorldBox(size[0], size[1], size[2])
+  return <mesh geometry={geo} position={at} material={material} castShadow={shadow} receiveShadow {...rest} />
 }
 
 /** Box from min/max corners — easier to reason about for walls */
@@ -151,6 +156,8 @@ function Roof() {
   const zc = (ROOF_FRONT + ROOF_BACK) / 2
   // box faces: +x, -x, +y (tiles), -y (ceiling boards), +z, -z
   const mats = [m.fascia, m.fascia, m.roofTop, m.roofUnder, m.fascia, m.fascia]
+  const roofGeo = useWorldBox(len, 0.26, depth)
+  const bargeGeo = useWorldBox(len, 0.38, 0.12)
   return (
     <group>
       {[-1, 1].map((side) => (
@@ -159,19 +166,16 @@ function Roof() {
           position={[(side * run) / 2, (RIDGE_Y + EAVE_Y) / 2 + 0.05, zc]}
           rotation={[0, 0, -side * angle]}
           material={mats}
+          geometry={roofGeo}
           castShadow
           receiveShadow
-        >
-          <boxGeometry args={[len, 0.26, depth]} />
-        </mesh>
+        />
       ))}
       {/* ridge cap */}
       <Box size={[0.5, 0.32, depth + 0.2]} at={[0, RIDGE_Y + 0.2, zc]} material={m.fascia} />
       {/* barge boards along the front gable */}
       {[-1, 1].map((side) => (
-        <mesh key={`b${side}`} position={[(side * run) / 2, (RIDGE_Y + EAVE_Y) / 2 - 0.06, ROOF_FRONT + 0.02]} rotation={[0, 0, -side * angle]} material={m.fascia} castShadow>
-          <boxGeometry args={[len, 0.38, 0.12]} />
-        </mesh>
+        <mesh key={`b${side}`} position={[(side * run) / 2, (RIDGE_Y + EAVE_Y) / 2 - 0.06, ROOF_FRONT + 0.02]} rotation={[0, 0, -side * angle]} material={m.fascia} geometry={bargeGeo} castShadow />
       ))}
     </group>
   )
@@ -222,9 +226,7 @@ export function Building() {
     <group>
       {/* raised floor and stone foundation */}
       <Slab min={[-HALF_W - 0.15, 0, -DEPTH - 0.15]} max={[HALF_W + 0.15, FLOOR_Y - 0.06, 0.15]} material={m.stoneBase} />
-      <mesh position={[0, FLOOR_Y - 0.03, -DEPTH / 2]} material={m.floor} receiveShadow>
-        <boxGeometry args={[HALF_W * 2, 0.06, DEPTH]} />
-      </mesh>
+      <Box size={[HALF_W * 2, 0.06, DEPTH]} at={[0, FLOOR_Y - 0.03, -DEPTH / 2]} material={m.floor} shadow={false} />
       {/* engawa veranda and stepping stone */}
       <Slab min={[-HALF_W - 0.6, FLOOR_Y - 0.1, 0.1]} max={[HALF_W + 0.6, FLOOR_Y, 1.45]} material={m.deck} />
       {[-HALF_W - 0.45, -2.2, 2.2, HALF_W + 0.45].map((x) => (

@@ -132,6 +132,9 @@ calendars; the restrictions in step 3 stop anyone else from using it. The time z
 |---|---|
 | Interface colours, fonts, spacing, motion speed | CSS variables at the top of [`src/styles/global.css`](src/styles/global.css) |
 | 3D scene colours (wood, plaster, blossoms, sky…) | [`src/config/theme.ts`](src/config/theme.ts) |
+| Photographic materials (tint, texture size in metres) | [`src/scene/materials.ts`](src/scene/materials.ts), files in `public/textures/` |
+| Sky lighting (swap the `.hdr` for another [Poly Haven](https://polyhaven.com/hdris) sky) | `SKY` in [`src/scene/realAssets.ts`](src/scene/realAssets.ts) |
+| Grass, cherry-blossom clusters | [`src/scene/Grass.tsx`](src/scene/Grass.tsx), [`src/scene/CherryTrees.tsx`](src/scene/CherryTrees.tsx) |
 | Lights | `Lights` in [`src/scene/DojoCanvas.tsx`](src/scene/DojoCanvas.tsx) |
 | Procedural textures (wood grain, shoji, calligraphy…) | [`src/scene/textures.ts`](src/scene/textures.ts) |
 | Building, garden, trees, objects | `src/scene/Building.tsx`, `Garden.tsx`, `CherryTrees.tsx`, `DojoObjects.tsx` |
@@ -145,8 +148,8 @@ All of these are in [`src/config/experience.ts`](src/config/experience.ts):
 - `camera` sets the start position, the entrance path points, the resting position inside, the field of
   view and how far the camera moves towards an object.
 - `hotspots` sets where each section's object sits in the dojo and whether its label is above or below it.
-- `quality` sets the low / medium / high presets: pixel-ratio cap, shadows, number of petals and blossoms,
-  and texture size.
+- `quality` sets the low / medium / high presets: pixel-ratio cap, shadows, number of petals, blossoms and
+  grass blades, texture detail, and the camera-like finish (ambient occlusion, soft glow, vignette).
 
 The quality tier is chosen from the device and lowered automatically if the frame rate drops.
 Add `?quality=low`, `?quality=medium` or `?quality=high` to the address to force one.
@@ -180,8 +183,12 @@ src/
   decorative calligraphy.
 - **Fallbacks.** No WebGL, a failed scene, a lost GPU context, or the visitor choosing "Simple version"
   during a slow load all switch to an HTML version with every section.
-- **Performance.** The 3D code loads after the page shell. Textures are drawn in code, so there are no image
-  downloads. Blossoms and petals each use a single draw call. Pixel ratio is capped, shadows and particle
+- **Realism.** Photographic CC0 materials (hinoki floor, cedar, plaster, roof tiles, stone, gravel, bark),
+  image-based lighting from a real sunrise sky, sunlight that falls through the open shoji with soft light
+  shafts, swaying grass, cherry-blossom clusters that cast dappled shadows, and ambient occlusion on capable devices.
+  Every photographic file is optional: if one fails to load, the drawn version is used instead.
+- **Performance.** The 3D code loads after the page shell, and the textures (about 2 MB) and sky (1.6 MB) load
+  behind the loading screen. Grass, blossoms and petals each use a single draw call. Pixel ratio is capped, shadows and particle
   counts scale with quality, and rendering pauses while the tab is hidden.
 - **Accessibility.** Keyboard navigation with visible focus, skip link, focus moved to the panel heading
   and returned on close, Escape to close, `prefers-reduced-motion` respected, and a persistent motion toggle.

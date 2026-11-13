@@ -1,9 +1,11 @@
 /** The garden around the dojo: ground, raked gravel path, lanterns, hedges, trees, hills, sky. */
 import * as THREE from 'three'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { Box } from './Building'
 import { CherryTrees, type TreeSpec } from './CherryTrees'
 import { useMaterials } from './materials'
+import { Grass } from './Grass'
+import { worldPlane } from './realAssets'
 import { rng } from './textures'
 
 const TREES: TreeSpec[] = [
@@ -72,22 +74,44 @@ function Hedges() {
   )
 }
 
+/** Flat natural stones with irregular, softly rounded outlines */
+function stoneGeometry(seed: number) {
+  const r = rng(seed)
+  const g = new THREE.CylinderGeometry(1, 1, 0.08, 28, 2)
+  const pos = g.attributes.position as THREE.BufferAttribute
+  const bumps = [r() * 6, r() * 6, r() * 6]
+  for (let i = 0; i < pos.count; i++) {
+    const x = pos.getX(i)
+    const z = pos.getZ(i)
+    const a = Math.atan2(z, x)
+    const k = 1 + 0.09 * Math.sin(a * 2 + bumps[0]) + 0.06 * Math.sin(a * 3 + bumps[1]) + 0.04 * Math.sin(a * 5 + bumps[2])
+    pos.setX(i, x * k)
+    pos.setZ(i, z * k)
+    if (pos.getY(i) > 0) pos.setY(i, pos.getY(i) + 0.012 * Math.sin(x * 3 + bumps[0]) * Math.cos(z * 2))
+  }
+  g.computeVertexNormals()
+  // UVs in metres from the top view so the stone texture isn't stretched
+  const uv = g.attributes.uv as THREE.BufferAttribute
+  for (let i = 0; i < uv.count; i++) uv.setXY(i, pos.getX(i) * 0.8, pos.getZ(i) * 0.8)
+  return g
+}
+
 function SteppingStones() {
   const { m } = useMaterials()
   const stones = useMemo(() => {
     const r = rng(17)
     return [3.0, 4.1, 5.3, 6.6, 7.9, 9.3, 10.8, 12.4, 14.0].map((z, i) => ({
-      p: [(i % 2 ? 0.18 : -0.16) + (r() - 0.5) * 0.12, 0.035, z] as [number, number, number],
-      s: [0.42 + r() * 0.1, 1, 0.32 + r() * 0.08] as [number, number, number],
+      p: [(i % 2 ? 0.18 : -0.16) + (r() - 0.5) * 0.12, 0.03, z] as [number, number, number],
+      s: [0.4 + r() * 0.1, 1, 0.3 + r() * 0.08] as [number, number, number],
       ry: r() * Math.PI,
+      geo: stoneGeometry(100 + i),
     }))
   }, [])
+  useEffect(() => () => stones.forEach((s) => s.geo.dispose()), [stones])
   return (
     <group>
       {stones.map((s, i) => (
-        <mesh key={i} position={s.p} scale={s.s} rotation={[0, s.ry, 0]} material={m.stone} receiveShadow castShadow>
-          <cylinderGeometry args={[1, 1.05, 0.07, 9]} />
-        </mesh>
+        <mesh key={i} geometry={s.geo} position={s.p} scale={s.s} rotation={[0, s.ry, 0]} material={m.stone} receiveShadow castShadow />
       ))}
     </group>
   )
@@ -117,7 +141,7 @@ function Fence() {
   )
 }
 
-function Backdrop() {
+function Backdrop({ photoSky }: { photoSky: boolean }) {
   const { m, tx } = useMaterials()
   const skyMat = useMemo(() => new THREE.MeshBasicMaterial({ map: tx.sky, side: THREE.BackSide, fog: false, depthWrite: false }), [tx.sky])
   const hills = useMemo(() => {
@@ -130,9 +154,12 @@ function Backdrop() {
   }, [])
   return (
     <group>
-      <mesh material={skyMat} renderOrder={-1}>
-        <sphereGeometry args={[120, 24, 16]} />
-      </mesh>
+      {/* with the photographic sky the background is the blurred sky photo itself */}
+      {!photoSky && (
+        <mesh material={skyMat} renderOrder={-1}>
+          <sphereGeometry args={[120, 24, 16]} />
+        </mesh>
+      )}
       {hills.map((h, i) => (
         <mesh key={i} position={h.p} scale={h.s} material={h.far ? m.hillsFar : m.hills}>
           <sphereGeometry args={[1, 16, 10]} />
@@ -148,20 +175,21 @@ function Backdrop() {
   )
 }
 
-export function Garden({ blossoms, reducedMotion }: { blossoms: number; reducedMotion: boolean }) {
+function Ground({ w, h, material, ...rest }: { w: number; h: number; material: THREE.Material; position?: [number, number, number] }) {
+  const geo = useMemo(() => worldPlane(w, h), [w, h])
+  useEffect(() => () => geo.dispose(), [geo])
+  return <mesh rotation={[-Math.PI / 2, 0, 0]} geometry={geo} material={material} receiveShadow {...rest} />
+}
+
+export function Garden({ blossoms, grass, reducedMotion, photoSky }: { blossoms: number; grass: number; reducedMotion: boolean; photoSky: boolean }) {
   const { m } = useMaterials()
   return (
     <group>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} material={m.grass} receiveShadow>
-        <planeGeometry args={[150, 150]} />
-      </mesh>
+      <Ground w={150} h={150} material={m.grass} />
       {/* raked gravel courtyard and path */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 9.5]} material={m.gravel} receiveShadow>
-        <planeGeometry args={[3.4, 15]} />
-      </mesh>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.008, 1.6]} material={m.gravel} receiveShadow>
-        <planeGeometry args={[12.5, 3.4]} />
-      </mesh>
+      <Ground w={3.4} h={15} material={m.gravel} position={[0, 0.01, 9.5]} />
+      <Ground w={12.5} h={3.4} material={m.gravel} position={[0, 0.008, 1.6]} />
+      {grass > 0 && <Grass count={grass} reducedMotion={reducedMotion} />}
       {[-1.75, 1.75].map((x) => (
         <Box key={x} size={[0.12, 0.08, 15]} at={[x, 0.03, 9.5]} material={m.stoneDark} shadow={false} />
       ))}
@@ -172,7 +200,7 @@ export function Garden({ blossoms, reducedMotion }: { blossoms: number; reducedM
       <Hedges />
       <Fence />
       <CherryTrees trees={TREES} clusters={blossoms} reducedMotion={reducedMotion} />
-      <Backdrop />
+      <Backdrop photoSky={photoSky} />
     </group>
   )
 }

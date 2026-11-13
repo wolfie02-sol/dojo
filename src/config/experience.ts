@@ -107,10 +107,16 @@ export interface QualityPreset {
   blossoms: number
   /** Canvas texture resolution */
   textureSize: number
+  /** Grass blades in the garden */
+  grass: number
+  /** Photographic detail (normal) maps */
+  normals: boolean
+  /** Camera-like finish: ambient occlusion, soft glow, vignette ('full' | 'light' | 'none') */
+  post: 'full' | 'light' | 'none'
 }
 
 export const quality: Record<QualityTier, QualityPreset> = {
-  high: { maxDpr: 2, antialias: true, shadows: true, shadowMapSize: 2048, petals: 420, blossoms: 120, textureSize: 1024 },
-  medium: { maxDpr: 1.5, antialias: true, shadows: true, shadowMapSize: 1024, petals: 240, blossoms: 90, textureSize: 512 },
-  low: { maxDpr: 1.25, antialias: false, shadows: true, shadowMapSize: 512, petals: 110, blossoms: 60, textureSize: 512 },
+  high: { maxDpr: 2, antialias: true, shadows: true, shadowMapSize: 2048, petals: 420, blossoms: 95, textureSize: 1024, grass: 60000, normals: true, post: 'full' },
+  medium: { maxDpr: 1.5, antialias: true, shadows: true, shadowMapSize: 2048, petals: 240, blossoms: 75, textureSize: 512, grass: 28000, normals: true, post: 'light' },
+  low: { maxDpr: 1.25, antialias: false, shadows: true, shadowMapSize: 1024, petals: 110, blossoms: 50, textureSize: 512, grass: 9000, normals: false, post: 'none' },
 }
