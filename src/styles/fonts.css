@@ -1,0 +1,13 @@
+/* Japanese fonts, reduced to the characters the site uses (scripts/subset-fonts.mjs). */
+@font-face {
+  font-family: 'Yuji Syuku';
+  src: url('/fonts/yuji-syuku-subset.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Shippori Mincho';
+  src: url('/fonts/shippori-mincho-subset.woff2') format('woff2');
+  font-weight: 400 600;
+  font-display: swap;
+}
