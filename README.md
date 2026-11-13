@@ -83,9 +83,9 @@ Placeholder rules:
 Section names, addresses and menu order are in [`src/config/site.ts`](src/config/site.ts).
 Interface wording is in [`src/i18n/ui.ts`](src/i18n/ui.ts).
 
-### Photos and video
+### Photos
 
-[`src/config/media.ts`](src/config/media.ts) controls the opening image or video, the zoom, and the section photos.
+[`src/config/media.ts`](src/config/media.ts) controls the home page collage and the section photos.
 
 - **Home page collage:** `collage` in `media.ts` lists the photos (files in `public/images/collage/`, each as
   `.webp` + `.jpg`, about 720×480), the number of rows and the speed (`secondsPerLoop`, higher is slower).
