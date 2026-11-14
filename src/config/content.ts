@@ -249,9 +249,21 @@ export const linkGroups: { title: L; links: ExternalLink[] }[] = [
   {
     title: { fr: 'Fédérations', en: 'Federations' },
     links: [
-      { title: { fr: 'Japan Karate Association (JKA)', en: 'Japan Karate Association (JKA)' }, description: { fr: 'Siège mondial', en: 'World headquarters' }, url: '' },
-      { title: { fr: 'Fédération nationale — à confirmer', en: 'National federation — to be confirmed' }, description: null, url: '' },
-      { title: { fr: 'Association régionale — à confirmer', en: 'Regional association — to be confirmed' }, description: null, url: '' },
+      {
+        title: { fr: 'Association de karaté JKA du Québec (AKJKAQ)', en: 'JKA Karate Association of Quebec (AKJKAQ)' },
+        description: { fr: 'Association provinciale', en: 'Provincial association' },
+        url: 'https://www.akjkaq.ca/',
+      },
+      {
+        title: { fr: 'JKA SKD Canada', en: 'JKA SKD Canada' },
+        description: { fr: 'Organisation nationale', en: 'National organization' },
+        url: 'https://www.jkaskd.ca/index.htm',
+      },
+      {
+        title: { fr: 'Association Japonaise de Karaté (JKA)', en: 'Japan Karate Association (JKA)' },
+        description: { fr: 'Siège mondial, Japon', en: 'World headquarters, Japan' },
+        url: 'https://www.jka.or.jp/en/',
+      },
     ],
   },
   {
