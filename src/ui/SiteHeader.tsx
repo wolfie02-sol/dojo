@@ -57,9 +57,7 @@ export function SiteHeader() {
       </a>
       <div className="site-header__bar">
         <a className="brand" href={routeToPath({ lang: route.lang, section: null })} onClick={(e) => go(e, null)}>
-          <span className="brand__mark" lang="ja" aria-hidden="true">
-            {dojo.calligraphy}
-          </span>
+          <img className="brand__logo" src={`${import.meta.env.BASE_URL}${dojo.logo.mark.slice(1)}`} alt="" width={40} height={40} />
           <span className="brand__name">{dojo.name[route.lang]}</span>
         </a>
         <nav className="nav" aria-label={ui.sections}>

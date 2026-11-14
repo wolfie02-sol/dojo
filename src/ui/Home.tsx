@@ -85,11 +85,8 @@ export function Home({ lang }: { lang: Lang }) {
 
       <div className="home__content">
         <div className="home__intro">
-          <p className="home__kanji" lang="ja" aria-hidden="true">
-            {dojo.calligraphy}
-          </p>
           <h1 className="home__title" tabIndex={-1}>
-            {dojo.name[lang]}
+            <img className="home__logo" src={asset(dojo.logo.badge)} alt={`${dojo.name[lang]} — ${dojo.kanjiName}`} width={894} height={1185} />
           </h1>
           <p className="home__tagline">{dojo.tagline[lang]}</p>
         </div>

@@ -31,7 +31,7 @@ type MaybeL = Localized | null
 
 export const dojo = {
   /** Dojo name, shown in the header, on the entrance and in page titles */
-  name: { fr: 'Nom du dojo', en: 'Dojo name' } as L,
+  name: { fr: 'Haku Rō', en: 'Haku Rō' } as L,
   /** Short line under the name on the entrance */
   tagline: {
     fr: 'Karaté Shotokan · Japan Karate Association',
@@ -39,8 +39,21 @@ export const dojo = {
   } as L,
   /** Style / affiliation, shown as a small badge */
   style: { fr: 'Karaté Shotokan JKA', en: 'JKA Shotokan Karate' } as L,
-  /** Small Japanese accent above the name (Japanese only) */
+  /** Small Japanese accent (Japanese only) */
   calligraphy: '空手道',
+  /** The dojo's name in kanji (白狼 = white wolf) */
+  kanjiName: '白狼',
+  /**
+   * Logo files in public/images/logo/:
+   *  - full:  the complete logo, transparent background (for light backgrounds)
+   *  - badge: the complete logo on a cream tile (for photos and dark backgrounds)
+   *  - mark:  the wolf disc only, square (browser tab icon, small spaces)
+   */
+  logo: {
+    full: '/images/logo/hakuro-logo.svg',
+    badge: '/images/logo/hakuro-badge.svg',
+    mark: '/images/logo/hakuro-mark.svg',
+  },
 }
 
 /* ---------------------------------------------------------- Calls to action */
@@ -71,15 +84,18 @@ export const about = {
       en: '[Teaching philosophy coming soon] What students find here: discipline, respect, fitness, confidence.',
     },
   ] as L[],
-  /** Dojo Kun — the five maxims recited in Shotokan dojos. Edit or remove freely. */
+  /**
+   * Dojo Kun — wording of JKA-SKD Canada's ethics code (French and English versions).
+   * `romaji` is the Japanese read aloud at the end of class.
+   */
   dojoKun: {
-    title: { fr: 'Dōjō kun', en: 'Dōjō kun' } as L,
+    title: { fr: 'Dojo Kun (préceptes du Dojo)', en: 'Dojo Kun (precepts of the Dojo)' } as L,
     items: [
-      { jp: '一、人格完成に努むること', fr: 'Chercher la perfection du caractère', en: 'Seek perfection of character' },
-      { jp: '一、誠の道を守ること', fr: 'Être fidèle', en: 'Be faithful' },
-      { jp: '一、努力の精神を養うこと', fr: 'Cultiver l’effort', en: 'Endeavour' },
-      { jp: '一、礼儀を重んずること', fr: 'Respecter les autres', en: 'Respect others' },
-      { jp: '一、血気の勇を戒むること', fr: 'S’abstenir de toute violence', en: 'Refrain from violent behaviour' },
+      { romaji: 'Hitotsu, Jinkaku kansei ni tsutomuru koto', fr: 'Recherche la perfection du caractère', en: 'Seek perfection of character' },
+      { romaji: 'Hitotsu, Makoto no michi o mamoru koto', fr: 'Sois loyal', en: 'Be Faithful' },
+      { romaji: 'Hitotsu, Doryoku no seishin o yashinau koto', fr: 'Surpasse-toi', en: 'Endeavor' },
+      { romaji: 'Hitotsu, Reigi o omonzuru koto', fr: 'Respecte les autres', en: 'Respect others' },
+      { romaji: 'Hitotsu, Kekki no yuu o imashimuru koto', fr: 'Abstiens-toi de conduite violente', en: 'Refrain from violent behavior' },
     ],
   },
 }

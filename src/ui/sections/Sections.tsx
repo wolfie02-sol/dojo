@@ -29,8 +29,8 @@ export function AboutSection({ lang }: { lang: Lang }) {
       <ol className="dojo-kun">
         {about.dojoKun.items.map((item, i) => (
           <li key={i}>
-            <span className="dojo-kun__jp" lang="ja">
-              {item.jp}
+            <span className="dojo-kun__romaji" lang="ja-Latn">
+              {item.romaji}
             </span>
             <span className="dojo-kun__tr">{item[lang]}</span>
           </li>

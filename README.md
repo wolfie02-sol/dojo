@@ -64,9 +64,9 @@ npm run preview
 
 | What | Where in `content.ts` |
 |---|---|
-| Name, tagline, style, small kanji | `dojo` |
+| Name, kanji name, logo files, tagline, style | `dojo` |
 | Buttons on the opening image | `cta` |
-| About text, Dojo kun | `about` |
+| About text, Dojo Kun (JKA-SKD Canada wording) | `about` |
 | Instructors | `instructors` |
 | Weekly classes | `schedule.classes` (day 0 = Monday … 6 = Sunday) |
 | Calendar settings, sample events, event types | `calendar`, `eventKinds` |

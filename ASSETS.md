@@ -47,11 +47,12 @@ Before launch, open each source link once to confirm the photo is still offered 
 
 | Asset | Source | Licence |
 |---|---|---|
+| Haku Rō logo (`public/images/logo/`) | Supplied by the dojo (PDF), converted to SVG; the badge and mark are cropped/backed versions | Property of the dojo |
+| Dojo Kun wording (FR / EN) | JKA-SKD Canada ethics code | Quoted as supplied by the dojo |
 | Placeholder portrait (`public/images/placeholder-person.svg`), favicon | Made for this project | Part of this project |
 | Cormorant Garamond (headings) | [Fontsource](https://fontsource.org/fonts/cormorant-garamond) / Christian Thalmann | SIL Open Font License 1.1 |
 | Zen Kaku Gothic New (body) | [Fontsource](https://fontsource.org/fonts/zen-kaku-gothic-new) / Yoshimichi Ohira | SIL Open Font License 1.1 |
 | Shippori Mincho (Japanese accents) | [Fontsource](https://fontsource.org/fonts/shippori-mincho) / FONTDASU | SIL Open Font License 1.1, subset to the characters used (`scripts/subset-fonts.mjs`) |
-| Dōjō kun (About section) | Traditional Shotokan text | Public domain; translations written for this project |
 
 Fonts are self-hosted, so the site makes no Google Fonts requests. The JKA name is used only to state the
 dojo's affiliation; no JKA logo or artwork is included.

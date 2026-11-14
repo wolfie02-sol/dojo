@@ -37,9 +37,7 @@ export function App() {
         <footer className="footer">
           <div className="footer__inner">
             <div>
-              <p className="footer__kanji" lang="ja" aria-hidden="true">
-                {dojo.calligraphy}
-              </p>
+              <img className="footer__logo" src={`${import.meta.env.BASE_URL}${dojo.logo.badge.slice(1)}`} alt="" width={72} height={95} />
               <p className="footer__name">{dojo.name[route.lang]}</p>
               <p className="footer__tag">{dojo.tagline[route.lang]}</p>
             </div>
