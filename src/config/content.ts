@@ -114,23 +114,14 @@ export interface Instructor {
 
 export const instructors: Instructor[] = [
   {
-    name: { fr: 'Nom du sensei', en: 'Sensei name' },
-    rank: null,
-    role: { fr: 'Instructeur en chef', en: 'Chief instructor' },
+    name: { fr: 'Manon Quirion', en: 'Manon Quirion' },
+    rank: { fr: 'Nana (7e) Dan', en: 'Nana (7th) Dan' },
+    role: { fr: 'Sensei', en: 'Sensei' },
     bio: {
-      fr: '[Biographie à venir] Parcours, années de pratique, grade et certifications JKA.',
-      en: '[Biography coming soon] Background, years of practice, rank and JKA certifications.',
+      fr: '[Biographie à venir] Parcours, années de pratique et certifications.',
+      en: '[Biography coming soon] Background, years of practice and certifications.',
     },
     photo: null,
-    placeholder: true,
-  },
-  {
-    name: { fr: 'Nom de l’assistant·e', en: 'Assistant name' },
-    rank: null,
-    role: { fr: 'Instructeur·rice assistant·e', en: 'Assistant instructor' },
-    bio: null,
-    photo: null,
-    placeholder: true,
   },
 ]
 
@@ -210,14 +201,14 @@ export const calendar = {
 
 /** Dan rank → display. Edit the wording freely. */
 export const danNames: Record<number, { jp: string; fr: string; en: string }> = {
-  1: { jp: '初段', fr: 'Shodan · 1er dan', en: 'Shodan · 1st dan' },
-  2: { jp: '弐段', fr: 'Nidan · 2e dan', en: 'Nidan · 2nd dan' },
-  3: { jp: '参段', fr: 'Sandan · 3e dan', en: 'Sandan · 3rd dan' },
-  4: { jp: '四段', fr: 'Yondan · 4e dan', en: 'Yondan · 4th dan' },
-  5: { jp: '五段', fr: 'Godan · 5e dan', en: 'Godan · 5th dan' },
-  6: { jp: '六段', fr: 'Rokudan · 6e dan', en: 'Rokudan · 6th dan' },
-  7: { jp: '七段', fr: 'Nanadan · 7e dan', en: 'Nanadan · 7th dan' },
-  8: { jp: '八段', fr: 'Hachidan · 8e dan', en: 'Hachidan · 8th dan' },
+  1: { jp: '初段', fr: 'Sho (1e) Dan', en: 'Sho (1st) Dan' },
+  2: { jp: '弐段', fr: 'Ni (2e) Dan', en: 'Ni (2nd) Dan' },
+  3: { jp: '参段', fr: 'San (3e) Dan', en: 'San (3rd) Dan' },
+  4: { jp: '四段', fr: 'Yon (4e) Dan', en: 'Yon (4th) Dan' },
+  5: { jp: '五段', fr: 'Go (5e) Dan', en: 'Go (5th) Dan' },
+  6: { jp: '六段', fr: 'Roku (6e) Dan', en: 'Roku (6th) Dan' },
+  7: { jp: '七段', fr: 'Nana (7e) Dan', en: 'Nana (7th) Dan' },
+  8: { jp: '八段', fr: 'Hachi (8e) Dan', en: 'Hachi (8th) Dan' },
 }
 
 export interface BlackBelt {
@@ -228,12 +219,24 @@ export interface BlackBelt {
 }
 
 export const blackBelts: BlackBelt[] = [
-  { name: 'Ceinture noire A', dan: 3, photo: null, placeholder: true },
-  { name: 'Ceinture noire B', dan: 2, photo: null, placeholder: true },
-  { name: 'Ceinture noire C', dan: 2, photo: null, placeholder: true },
-  { name: 'Ceinture noire D', dan: 1, photo: null, placeholder: true },
-  { name: 'Ceinture noire E', dan: 1, photo: null, placeholder: true },
-  { name: 'Ceinture noire F', dan: 1, photo: null, placeholder: true },
+  { name: 'Sensei Manon Quirion', dan: 7, photo: null },
+  { name: 'Robert Lacerte', dan: 5, photo: null },
+  { name: 'Nadia Hardy', dan: 5, photo: null },
+  { name: 'Jean-Pierre Houle', dan: 5, photo: null },
+  { name: 'Christine Roux', dan: 4, photo: null },
+  { name: 'Xin Yi Fan', dan: 3, photo: null },
+  { name: 'Laurence Blain', dan: 3, photo: null },
+  { name: 'Marc Piccin', dan: 3, photo: null },
+  { name: 'Joseph Raad', dan: 3, photo: null },
+  { name: 'Fréderick Vinette', dan: 3, photo: null },
+  { name: 'Kelly Yan', dan: 3, photo: null },
+  { name: 'Guilherme Tavares-Machado', dan: 3, photo: null },
+  { name: 'Etienne Duquette', dan: 2, photo: null },
+  { name: 'Ana Martina Botti', dan: 1, photo: null },
+  { name: 'Paul Arnoux', dan: 1, photo: null },
+  { name: 'Emilie Fayertes', dan: 1, photo: null },
+  { name: 'Eméry Facal-Montpetit', dan: 1, photo: null },
+  { name: 'Gabrielle Ouellette', dan: 1, photo: null },
 ]
 
 /* ------------------------------------------------------------------- Links */

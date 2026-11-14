@@ -1070,12 +1070,16 @@ h2[tabindex='-1']:focus-visible {
   font-size: 19px;
 }
 .belts {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: var(--s-5);
   margin: 0;
   padding: 0;
   list-style: none;
+}
+.belt {
+  width: 170px;
 }
 .belt .photo {
   border-bottom: 6px solid var(--ink);
@@ -1092,8 +1096,10 @@ h2[tabindex='-1']:focus-visible {
 }
 @media (max-width: 480px) {
   .belts {
-    grid-template-columns: repeat(2, 1fr);
     gap: var(--s-4);
+  }
+  .belt {
+    width: calc(50% - var(--s-4) / 2);
   }
 }
 

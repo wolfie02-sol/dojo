@@ -50,7 +50,7 @@ export function SenseiSection({ lang }: { lang: Lang }) {
           <Photo src={p.photo} alt={`${ui.photoOf} ${p.name[lang]}`} />
           <div className="person__body">
             <h3 className="person__name">
-              {p.name[lang]} <ExampleBadge lang={lang} show={p.placeholder} />
+              {p.name[lang]} <ExampleBadge lang={lang} show={Boolean(p.placeholder)} />
             </h3>
             <p className="person__meta">
               <OrSoon value={p.role} lang={lang}>
